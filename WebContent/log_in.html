@@ -10,7 +10,61 @@
 		<script type="text/javascript" src="scripts/login.js"></script>
 		
 		<script type="text/javascript">
-			
+			$(function(){
+				$("#regist_button").click(function(){
+					// 清除原有提示信息
+					$("#warning_1").hide();
+					$("#warning_2").hide();
+					$("#warning_3").hide();
+					$("#warning_4").hide();
+					// 获取请求参数
+					var name = $("#regist_username").val().trim();
+					var nick = $("#nickname").val().trim();
+					var pwd = $("#regist_password").val().trim();
+					var final_pwd = $("#final_password").val().trim();
+					// 检查参数格式
+					var isCheck = true;
+					if (name == "") {
+						$("#warning_1 span").html("用户名为空");
+						$("#warning_1").show();
+						isCheck = false;
+					}
+					if (nick == "") {
+						$("#warning_2 span").html("昵称为空");
+						$("#warning_2").show();
+						isCheck = false;
+					}
+					if (pwd == "") {
+						$("#warning_3 span").html("密码为空");
+						$("#warning_4").show();
+						isCheck = false;
+					}
+					if (final_pwd == "") {
+						$("#warning_4 span").html("确认密码为空");
+						$("#warning_4").show();
+						isCheck = false;
+					}
+					// 发送ajax请求
+					if (isCheck) {
+						$.ajax({
+							url:url_path+"/user/regist.do",
+							type : "post",
+							data : {
+								"name" : name,
+								"nick" : nick,
+								"pwd" : pwd,
+								"final_pwd" : final_pwd
+							},
+							datatype : "json",
+							success : function(result) {
+							},
+							error : function() {
+								alert("注册失败");
+							}
+						});
+					}
+				});
+			})
 		</script>
 		
 	</head>
@@ -61,18 +115,19 @@
 					<dt>
 						<div class='letter'>
 							昵&nbsp;&nbsp;&nbsp;称:&nbsp;<input type="text" name="" id="nickname" tabindex='6'/>
+							<div class='warning' id='warning_2'><span>该用户名不可用</span></div>
 						</div>
 					</dt>
 					<dt>
 						<div class='letter'>
 							密&nbsp;&nbsp;&nbsp;码:&nbsp;<input type="password" name="" id="regist_password" tabindex='7'/>
-							<div class='warning' id='warning_2'><span>密码长度过短</span></div>
+							<div class='warning' id='warning_3'><span>密码长度过短</span></div>
 						</div>
 					</dt>
 					<dt>
 						<div class='password'>
 							&nbsp;&nbsp;&nbsp;确认密码:&nbsp;<input type="password" name="" id="final_password" tabindex='8'/>
-							<div class='warning' id='warning_3'><span>密码输入不一致</span></div>
+							<div class='warning' id='warning_4'><span>密码输入不一致</span></div>
 						</div>
 					</dt>
 					<dt>
